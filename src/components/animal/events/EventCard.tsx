@@ -1,7 +1,9 @@
+import clsx from 'clsx';
 import React, { useState } from 'react';
 
-import { Card, CardContent, CardHeader, Collapse, IconButton, Typography } from '@material-ui/core';
+import { Card, CardContent, CardHeader, Collapse, IconButton, Paper, Typography } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
+import green from '@material-ui/core/colors/green';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import LocalHospitalIcon from '@material-ui/icons/LocalHospital';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
@@ -14,12 +16,13 @@ export default function EventCard({ event }: AnimalCardProps) {
     const eventName = event.type?.type || '';
     const header = `Event type - ${eventName}`;
     const subHeader = `${event.dateTime ? getFormattedDate(event.dateTime) : '-'} / Author`;
+    const dynamicElevation = expanded ? 5 : 1;
 
     return (
-        <Card className={classes.root}>
+        <Paper className={classes.root} component={Card} elevation={dynamicElevation}>
             <CardHeader
                 avatar={
-                    <Avatar aria-label="event" alt="event">
+                    <Avatar className={clsx(expanded && classes.avatarExpanded)} aria-label="event" alt="event">
                         <LocalHospitalIcon />
                     </Avatar>
                 }
@@ -58,13 +61,16 @@ export default function EventCard({ event }: AnimalCardProps) {
                     </Typography>
                 </CardContent>
             </Collapse>
-        </Card>
+        </Paper>
     );
 }
 
 const useStyles = makeStyles(theme => ({
     root: {
         width: '100%',
+        '&:hover': {
+            backgroundColor: green[100],
+        },
     },
     headerText: {
         maxWidth: 150,
@@ -83,6 +89,9 @@ const useStyles = makeStyles(theme => ({
     },
     label: {
         fontWeight: theme.typography.fontWeightBold,
+    },
+    avatarExpanded: {
+        backgroundColor: theme.palette.secondary.main,
     },
 }));
 
